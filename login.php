@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,7 +81,7 @@
 <main> 
     <div class="container">
         <h1 class="login-title">Hai già un'account?</h1>
-        <form class="form" method="post" name="login">
+        <form class="login-form" method="post" name="login">
             <div class="input-box">
                 <label class="label" for="email">Inserisci l'e-mail</label>
                 <input type="text" class="login-input" name="email" placeholder="name@example.com" autofocus="true"/>

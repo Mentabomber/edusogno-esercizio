@@ -140,5 +140,6 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
     <?php
     // } // End of conditional statement
 ?>
+
 </body>
 </html>

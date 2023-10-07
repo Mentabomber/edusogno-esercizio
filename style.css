@@ -4,10 +4,6 @@
     padding: 0;
 }
 
-
-
-
-
 h3 {
     font-weight: normal;
     text-align: center;
@@ -24,7 +20,7 @@ body{
     background-position: bottom;
     background-size: cover;
     width: 100vw;
-    height: 100vh; 
+     
    
 }
 
@@ -41,7 +37,7 @@ header{
     padding-left: 50px;
     align-items: center;
     color: red;
-    width: 100%;
+    width: 1440px;
     height: 120px;
 
 }
@@ -55,6 +51,7 @@ header{
     width: 1440px;
     
 }
+h1.registration-title,
 h1.dashboard-title,
 h1.login-title {
     margin-top: 80px;
@@ -68,7 +65,8 @@ h1.login-title {
     /* margin: 0px auto 25px; */
      
 }
-.form {
+.registration-form,
+.login-form {
     width: 662px;
     height: 434px;
     flex-shrink: 0;
@@ -180,13 +178,13 @@ h1.login-title {
 }
 
 .event-card{
-    word-break: break-all;
+    word-break: break-word;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: start;
     width: 300px;
-    max-height: 300px;
+    max-height: 350px;
     border-radius: 19px;
     border: 1px solid #134077;
     background: #FFF;
@@ -218,4 +216,58 @@ h1.login-title {
     border-radius: 11px;
     background: #0057FF;
     color: white;
+}
+
+/* Adding some basic styling to button */ 
+ 
+.btn,
+.login-button,
+.input-login-button{
+    text-decoration: none; 
+    box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24); 
+    cursor: pointer; 
+    transition: 0.2s all; 
+}
+
+
+.btn { 
+    border: none; 
+    padding: 12px 40px; 
+    font-family: DM Sans;
+    font-size: 20px; 
+    background: #0057FF;
+    color: #fff; 
+    border-radius:11px;
+
+} 
+/* Adding transformation when the button is active */ 
+.login-button:active,
+.input-login-button:active,
+.btn:active { 
+    transform: scale(0.98); 
+    /* Scaling button to 0.98 to its original size */ 
+    box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24); 
+    /* Lowering the shadow */ 
+} 
+
+#reset_container{
+    margin: auto;
+    width: 100%;
+    text-align: center;
+
+}
+
+#reset_form{
+    margin-bottom: 20px;
+}
+
+.logout-interaction{
+
+    font-size: 30px;
+}
+
+/* registration */
+
+.registration-form{
+    height: 604px;
 }
