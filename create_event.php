@@ -22,29 +22,24 @@
         if (empty($_POST['nome_evento'])) {
             $errors['title'] = "* Il titolo è richiesto.";
         } elseif (strlen($_POST['nome_evento']) < 3 || strlen($_POST['nome_evento']) > 25) {
-            $errors['title'] = "* Il nome deve essere lungo tra 3 e 25 caratteri.";
+            $errors['title'] = "* Il titolo deve essere lungo tra 3 e 25 caratteri.";
+        } else {
+            // Check if the title is already taken
+            $existingTitleQuery = "SELECT COUNT(*) FROM `eventi` WHERE nome_evento = ?";
+            $stmtTitle = $con->prepare($existingTitleQuery);
+            $stmtTitle->bind_param("s", $_POST['nome_evento']);
+            $stmtTitle->execute();
+            $stmtTitle->bind_result($titleCount);
+            $stmtTitle->fetch();
+            $stmtTitle->close();
+    
+            if ($titleCount > 0) {
+                $errors['title'] = "* Questo titolo è già stato utilizzato per un evento.";
+            }
         }
+        // Validate data
 
-        // // Validate cognome
-        // if (empty($_POST['cognome'])) {
-        //     $errors['cognome'] = "* Il cognome è richiesto.";
-        // } elseif (strlen($_POST['cognome']) < 3 || strlen($_POST['cognome']) > 50) {
-        //     $errors['cognome'] = "* Il cognome deve essere lungo tra 3 e 50 caratteri.";
-        // }
 
-        // // Validate email
-        // if (empty($_POST['email'])) {
-        //     $errors['email'] = "* L'email è richiesta.";
-        // } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        //     $errors['email'] = "* L'email non è valida.";
-        // }
-
-        // // Validate password
-        // if (empty($_POST['password'])) {
-        //     $errors['password'] = "* La password è richiesta.";
-        // } elseif (strlen($_POST['password']) < 6 || strlen($_POST['password']) > 20) {
-        //     $errors['password'] = "* La password deve essere lunga tra 6 e 20 caratteri.";
-        // }
         // Validation code for attendees
         if (empty($_POST['attendees'])) {
             $errors['attendees'] = "* L'elenco dei partecipanti è richiesto.";
@@ -82,13 +77,11 @@
             } catch (Exception $e) {
                 echo "Errore nell'invio dell'email: " . $e->getMessage();
             }
-            $counter = 0;
 
             $eventController->addEvent(new Event($title, $dataEvento, $attendees, $description));
+            $creationSuccessful = true;
             
         }
-         // If registration is successful, set a flag
-        //  $creationnSuccessful = ($stmt->affected_rows > 0);
     }
 // Set values for valid fields or empty strings for fields with errors
 $titleValue = (isset($_POST['title']) && !isset($errors['title'])) ? htmlspecialchars($_POST['title']) : '';
@@ -109,52 +102,55 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
 <body>
 <?php
     // Check if registration was successful
-    // if (isset($creationnSuccessful) && $creationnSuccessful) {
-    //     // Display success message
-    //     echo "<div class='form'>
-    //           <h3>Creazione evento avvenuta con successo.</h3><br/>
-    //           <p class='link'>Clicca qui per <a href='login.php'>accedere</a>.</p>
-    //           </div>";
-    // } else {
+    if (isset($creationSuccessful) && $creationSuccessful) {
+        // Display success message
+        echo "<div class='success-form'>
+              <h3 class='registration-title'>Creazione evento avvenuta con successo.</h3><br/>
+              <p class='link'>Clicca qui per <a href='admin_dashboard.php'>tornare</a> alla dashboard.</p>
+              </div>";
+    } else {
         // Display the registration form
     
 ?>
-<form  class="form" action="" method="post">
-        <h1 class="login-title">Crea un nuovo evento</h1>
-        <div class="login-input-box">
+<main>
+    <div class="container">
+        <h1 class="registration-title">Crea un nuovo evento</h1>
+        <form  class="event-creation-form" action="" method="post">
+            <div class="input-box">
 
-            <label for="nome_evento">Inserisci il titolo</label>
-            <input type="text" class="login-input" name="nome_evento" value="<?php echo $titleValue; ?>" required />
+                <label for="nome_evento">Inserisci il titolo</label>
+                <input type="text" class="login-input" name="nome_evento" value="<?php echo $titleValue; ?>" required />
+            </div>
             <?php echo isset($errors['title']) ? "<span class='error'>" . $errors['title'] . "</span>" : ""; ?>
-        </div>
-        <div class="login-input-box">
+            <div class="input-box">
 
-            <label for="data_evento">Inserisci la data</label>
-            <input type="datetime-local" class="login-input" name="data_evento" value="<?php echo $dataEventoValue; ?>" required />
+                <label for="data_evento">Inserisci la data</label>
+                <input type="datetime-local" class="login-input" name="data_evento" value="<?php echo $dataEventoValue; ?>" required />
+            </div>
             <?php if (isset($errors['data_evento'])) { echo "<span class='error'>" . $errors['data_evento'] . "</span>"; } ?>
-        </div>
 
-        <div class="login-input-box">
-            
-            <label for="attendees">Inserisci le mail dei partecipanti</label>
-            <input type="text" class="login-input" name="attendees"  value="<?php echo $attendeesValue; ?>" required />
+            <div class="input-box">
+                
+                <label for="attendees">Inserisci le mail dei partecipanti</label>
+                <input type="text" class="login-input" name="attendees"  value="<?php echo $attendeesValue; ?>" required />
+            </div>
             <?php if (isset($errors['attendees'])) { echo "<span class='error'>" . $errors['attendees'] . "</span>"; } ?>
-        </div>
 
-        <div class="login-input-box">
+            <div class="input-box">
 
-            <label for="description">Inserisci la descrizione</label>
-            <input type="text" class="login-input" name="description" value="<?php echo $descriptionValue; ?>" required />
+                <label for="description">Inserisci la descrizione</label>
+                <input type="text" class="login-input" name="description" value="<?php echo $descriptionValue; ?>" required />
+            </div>
             <?php if (isset($errors['description'])) { echo "<span class='error'>" . $errors['description'] . "</span>"; } ?>
-        </div>
 
-        <input  type="submit" name="submit" value="CREA" class="login-button">
-    </form>
-    <?php
-    // } // End of conditional statement
+            <input  type="submit" name="submit" value="CREA" class="login-button input-button-box">
+        </form>
+    </div>
+</main>
+        <?php
+    } // End of conditional statement
 ?>
 <script>
-const env = require('./env');
-console.log(process.env.TEST);</script>
+</script>
 </body>
 </html>

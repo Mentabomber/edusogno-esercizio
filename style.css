@@ -70,6 +70,7 @@ h1.login-title {
 .reset-form,
 .success-form,
 .registration-form,
+.event-creation-form,
 .login-form {
     width: 662px;
     height: 434px;
@@ -317,4 +318,10 @@ div.buttons-container form{
 
 #pswd-change-button{
     margin-top: 40px;
+}
+
+/* creation form */
+
+.event-creation-form{
+    height: 500px;
 }
