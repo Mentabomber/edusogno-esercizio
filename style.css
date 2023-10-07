@@ -49,10 +49,12 @@ header{
 .container{
     min-width: 100%;
     width: 1440px;
+    padding-bottom: 30px;
     
 }
 h1.registration-title,
 h1.dashboard-title,
+h2.dashboard-title,
 h1.login-title {
     margin-top: 80px;
     color: #134077;
@@ -65,11 +67,12 @@ h1.login-title {
     /* margin: 0px auto 25px; */
      
 }
+.reset-form,
+.success-form,
 .registration-form,
 .login-form {
     width: 662px;
     height: 434px;
-    flex-shrink: 0;
     background-color: #fff;
     margin: 50px auto;
     padding: 50px 25px;
@@ -97,13 +100,13 @@ h1.login-title {
     line-height: 99.5%; /* 19.9px */
 }
 .input-box{
-    
+
     border: 1px solid #ccc;
     border-left-style: hidden;
     border-right-style: hidden;
     border-top-style: hidden;
     padding-bottom: 5px;
-    margin-bottom: 40px;
+    margin-top: 30px;
 }
 .label{
     color: #231F20;
@@ -141,6 +144,7 @@ h1.login-title {
     flex-wrap: wrap;
     justify-content: center;
     gap: 60px;
+    margin-top: 40px;
 }
 
 .link {
@@ -250,7 +254,8 @@ h1.login-title {
     /* Lowering the shadow */ 
 } 
 
-#reset_container{
+#reset_container,
+#creation_container{
     margin: auto;
     width: 100%;
     text-align: center;
@@ -260,7 +265,7 @@ h1.login-title {
 #reset_form{
     margin-bottom: 20px;
 }
-
+#creation_button,
 .logout-interaction{
 
     font-size: 30px;
@@ -270,4 +275,46 @@ h1.login-title {
 
 .registration-form{
     height: 604px;
+}
+
+.success-form
+{
+    height: 150px;
+}
+
+
+/* admin dashboard */
+h2.dashboard-title{
+    font-size: 25px;
+}
+
+h3.dashboard-title{
+    font-size: 20px;
+}
+
+.buttons-container{
+    display: flex;
+    gap: 5%;
+    width: 100%;
+}
+.crud-button{
+    font-size: 20px;
+    cursor: pointer;
+}
+div.buttons-container button.delete{
+    background: red;
+    
+}
+
+div.buttons-container form{
+    width: 100%;
+}
+
+/* reset password form  */
+.reset-form{
+    height: 300px;
+}
+
+#pswd-change-button{
+    margin-top: 40px;
 }

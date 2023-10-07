@@ -7,12 +7,15 @@
     <link href="https://fonts.cdnfonts.com/css/dm-sans" rel="stylesheet">
 </head>
 <body><?php
-    //include auth_session.php file on all user panel pages
+
+    require_once __DIR__ . '/vendor/autoload.php';
     require_once('header.php');
-    include("auth_session.php");
+    require_once("auth_session.php");
     // chiedo i dati degli eventi al database
     require_once("get_eventi.php");
     require_once("send_mail.php");
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
     $events = getEventi($mail);
     // Controllo se l'email è stata mandata tramite $_SESSION['mail_sent'] e invio di messaggio di successo
     if(isset($_SESSION['mail_sent'])){
@@ -29,7 +32,7 @@
         $message = 'Ciao clicka il link per resettare la tua password <a href="http://localhost/Progetto-Edusogno/Edusogno_login/reset_pswd.php">Qui</a>' ;
         $headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-        $headers .= 'From: simcictilen@gmail.com' . "\r\n";
+        $headers .= 'From: ' . $_ENV['SENDER_EMAIL'] . "\r\n";
         // Chiama la funzione per inviare l'email
             try {
                 echo "ciao";
@@ -67,9 +70,9 @@
             <br/>
             <div id="reset_container">
                 <form id="reset_form" method="post">
-                    <p><button id="reset_button" class="btn" type="submit" name="reset_password">Resetta password</button></p>
+                    <button id="reset_button" class="btn" type="submit" name="reset_password">Resetta password</button>
                 </form>
-                <p><a class="logout-interaction" href="logout.php">Logout</a></p>
+               <a class="logout-interaction" href="logout.php">Logout</a>
             </div>
 
         </div>

@@ -8,9 +8,15 @@
 </head>
 <body>
 <?php
-    require('db.php');
+    
+    require_once('db.php');
     require_once('header.php');
     session_start();
+
+    if(isset($_SESSION['email']))
+    {
+        header('Location: dashboard.php');
+    } 
     // When form submitted, check and create user session.
     if (isset($_POST['email'])) {
         $email = stripslashes($_REQUEST['email']);    // removes backslashes
@@ -50,30 +56,27 @@
                 $_SESSION['nome'] = $nome;
                 $_SESSION['cognome'] = $cognome;
                 $_SESSION['tipo_user'] = $tipoUser;
-                var_dump($tipoUser);
-
+    
                 if ($_SESSION['tipo_user']['tipo_user'] == "admin") {
-                    // Redirect to admin_dashboard page
                     header("Location: admin_dashboard.php");
                 }
                 else{
-                    // Redirect to user dashboard page
                     header("Location: dashboard.php");
                 }
                
-                
+
             } else {
-                // Password is incorrect
-                echo "<div class='form'>
-                      <h3>Incorrect Email/password.</h3><br/>
-                      <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
+                // la Password non è corretta
+                echo "<div class='success-form'>
+                      <h3 class='registration-title'>Email o password errata.</h3><br/>
+                      <p class='link'>Clicka qui per provare ad <a href='login.php'>Autenticarti</a> di nuovo.</p>
                       </div>";
             }
         } else {
-            // User does not exist
-            echo "<div class='form'>
-                  <h3>Incorrect Email/password.</h3><br/>
-                  <p class='link'>Click here to <a href='login.php'>Login</a> again.</p>
+            // l'utente non esiste
+            echo "<div class='success-form'>
+                  <h3 class='registration-title'>Email o password errata.</h3><br/>
+                  <p class='link'Clicka qui per provare dio <a href='login.php'>Autenticarti</a> di nuovo.</p>
                   </div>";
         }
     } else {

@@ -39,14 +39,14 @@ class EventController {
         }
     }
     public function addEvent(Event $event) {
+        
         $title = $this->conn->real_escape_string($event->title);
         $dataEvento = $this->conn->real_escape_string($event->dataEvento);
         $attendees = $this->conn->real_escape_string($event->attendees);
         $description = $this->conn->real_escape_string($event->description);
-
         $sql = "INSERT INTO `eventi` (nome_evento, data_evento, attendees, description) VALUES ('$title', '$dataEvento', '$attendees', '$description')";
         $this->conn->query($sql);
-        header('Location: admin_dashboard.php' );
+        header('Location: admin_dashboard.php');
     }
 
     public function editEvent($id, Event $event) {
@@ -54,10 +54,6 @@ class EventController {
         $dataEvento = $this->conn->real_escape_string($event->dataEvento);
         $attendees = $this->conn->real_escape_string($event->attendees);
         $description = $this->conn->real_escape_string($event->description);
-        var_dump($title);
-        var_dump($dataEvento);
-        var_dump($attendees);
-        var_dump($description);
         $sql = "UPDATE `eventi` SET nome_evento='$title', data_evento='$dataEvento', attendees='$attendees', description='$description' WHERE id=$id";
         $this->conn->query($sql);
         header('Location: admin_dashboard.php');
@@ -69,20 +65,6 @@ class EventController {
         header('Location: admin_dashboard.php');
     }
 
-    public function getAllEvents() {
-        $events = [];
-
-        $sql = "SELECT * FROM events";
-        $result = $this->conn->query($sql);
-
-        if ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $events[] = new Event($row['title'], $row['dataEvento'], $row['attendees'], $row['description']);
-            }
-        }
-
-        return $events;
-    }
 
     public function closeConnection() {
         $this->conn->close();

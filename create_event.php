@@ -1,10 +1,21 @@
 <?php
-    require('db.php');
-    include('event_crud.php');
+    require_once __DIR__ . '/vendor/autoload.php';
+    require_once('db.php');
+    require_once('auth_session.php');
+    require_once('event_crud.php');
     require_once("send_mail.php");
-    $eventController = new EventController('localhost', 'root', '', 'db-edusogno');
-    $errors = array();
+    require_once('functions.php');
+    require_once('header.php');
 
+    if (!isAdmin()) {
+        header('location: logout.php');
+    }
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
+    $eventController = new EventController($_ENV['DB_HOST'], $_ENV['DB_USER'], '', $_ENV['DB_NAME']);
+    $errors = array();
+ 
     // When form submitted, insert values into the database.
     if (isset($_POST['submit'])) {
         // // Validate nome
@@ -57,14 +68,12 @@
             $attendees = isset($_POST['attendees']) ? implode(', ', (array)$_POST['attendees']) : '';
            
             $description = mysqli_real_escape_string($con, $_POST['description']);
-        
-            $eventController->addEvent(new Event($title, $dataEvento, $attendees, $description));
             $to      = $attendeesArray;
             $subject = 'Creazione nuovo evento';
             $message = 'E stato creato un nuovo evento di cui fai parte!' ;
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= 'From: simcictilen@gmail.com' . "\r\n";
+            $headers .= 'From: ' . $_ENV['SENDER_EMAIL'] . "\r\n";
             // Chiama la funzione per inviare l'email
             try {
                 
@@ -73,6 +82,10 @@
             } catch (Exception $e) {
                 echo "Errore nell'invio dell'email: " . $e->getMessage();
             }
+            $counter = 0;
+
+            $eventController->addEvent(new Event($title, $dataEvento, $attendees, $description));
+            
         }
          // If registration is successful, set a flag
         //  $creationnSuccessful = ($stmt->affected_rows > 0);
@@ -106,7 +119,7 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
         // Display the registration form
     
 ?>
-<form class="form" action="" method="post">
+<form  class="form" action="" method="post">
         <h1 class="login-title">Crea un nuovo evento</h1>
         <div class="login-input-box">
 
@@ -135,11 +148,13 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
             <?php if (isset($errors['description'])) { echo "<span class='error'>" . $errors['description'] . "</span>"; } ?>
         </div>
 
-        <input type="submit" name="submit" value="CREA" class="login-button">
+        <input  type="submit" name="submit" value="CREA" class="login-button">
     </form>
     <?php
     // } // End of conditional statement
 ?>
-
+<script>
+const env = require('./env');
+console.log(process.env.TEST);</script>
 </body>
 </html>

@@ -1,26 +1,29 @@
 <?php
-    require('db.php');
-    include('auth_session.php');
-    include('event_crud.php');
+    require_once('db.php');
+    require_once __DIR__ . '/vendor/autoload.php';
+    require_once('auth_session.php');
+    require_once('event_crud.php');
+    require_once('functions.php');
     require_once("send_mail.php");
-    var_dump($_SESSION['event_id']);
-    $eventController = new EventController('localhost', 'root', '', 'db-edusogno');
+    require_once('header.php');
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+    $eventController = new EventController($_ENV['DB_HOST'], $_ENV['DB_USER'], '', $_ENV['DB_NAME']);
+    // $eventController = new EventController('localhost', 'root', '', 'db-edusogno');
+    if (!isAdmin()) {
+        header('Location: logout.php');
+    }
+   
 
     $id = $_SESSION['event_id'];
-    var_dump($id);
 
     $eventById = $eventController->getEventById($id);
-    
-    var_dump($eventById);
     
     $nomeEvento = $eventById->title;
     $dataEvento = $eventById->dataEvento;
     $attendees = $eventById->attendees;
     $description = $eventById->description;
     // $attendees = isset($_POST['attendees']) ? implode(', ', (array)$_POST['attendees']) : '';
-    
-    
-   
     $errors = array();
 
     // When form submitted, insert values into the database.
@@ -55,7 +58,7 @@
             $message = "Un evento a cui partecipi e' stato modificato" ;
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= 'From: simcictilen@gmail.com' . "\r\n";
+            $headers .= 'From: ' . $_ENV['SENDER_EMAIL'] . "\r\n";
             $_SESSION['modifica_evento'] = false;
             // Chiama la funzione per inviare l'email
             try {
@@ -87,18 +90,7 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/tagify.min.js" integrity="sha512-E6nwMgRlXtH01Lbn4sgPAn+WoV2UoEBlpgg9Ghs/YYOmxNpnOAS49+14JMxIKxKSH3DqsAUi13vo/y1wo9S/1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-<?php
-    // Check if registration was successful
-    // if (isset($creationnSuccessful) && $creationnSuccessful) {
-    //     // Display success message
-    //     echo "<div class='form'>
-    //           <h3>Creazione evento avvenuta con successo.</h3><br/>
-    //           <p class='link'>Clicca qui per <a href='login.php'>accedere</a>.</p>
-    //           </div>";
-    // } else {
-        // Display the registration form
-    
-?>
+
 <form class="form" action="" method="post">
         <h1 class="login-title">Modifica evento</h1>
         <div class="login-input-box">
