@@ -45,7 +45,6 @@
             $errors['attendees'] = "* L'elenco dei partecipanti è richiesto.";
         } else {
             $attendeesArray = explode(',', $_POST['attendees']);
-            var_dump($attendeesArray);
             foreach ($attendeesArray as $email) {
                 $trimmedEmail = trim($email);
                 $pattern = "/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/";
@@ -63,12 +62,18 @@
             $attendees = isset($_POST['attendees']) ? implode(', ', (array)$_POST['attendees']) : '';
            
             $description = mysqli_real_escape_string($con, $_POST['description']);
+
+            $eventController->addEvent(new Event($title, $dataEvento, $attendees, $description));
+            $creationSuccessful = true;
+
             $to      = $attendeesArray;
             $subject = 'Creazione nuovo evento';
             $message = 'E stato creato un nuovo evento di cui fai parte!' ;
             $headers = "MIME-Version: 1.0" . "\r\n";
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= 'From: ' . $_ENV['SENDER_EMAIL'] . "\r\n";
+
+            
             // Chiama la funzione per inviare l'email
             try {
                 
@@ -78,8 +83,7 @@
                 echo "Errore nell'invio dell'email: " . $e->getMessage();
             }
 
-            $eventController->addEvent(new Event($title, $dataEvento, $attendees, $description));
-            $creationSuccessful = true;
+            
             
         }
     }
@@ -96,7 +100,7 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
 <head>
     <meta charset="utf-8"/>
     <title>Registration</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="assets/styles/style.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/tagify.min.js" integrity="sha512-E6nwMgRlXtH01Lbn4sgPAn+WoV2UoEBlpgg9Ghs/YYOmxNpnOAS49+14JMxIKxKSH3DqsAUi13vo/y1wo9S/1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
@@ -147,10 +151,9 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
         </form>
     </div>
 </main>
-        <?php
+    <?php
     } // End of conditional statement
 ?>
-<script>
-</script>
+
 </body>
 </html>

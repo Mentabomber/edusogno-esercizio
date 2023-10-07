@@ -6,7 +6,7 @@ require_once('get_eventi.php');
 require_once('event_crud.php');
 require_once('header.php');
 
-var_dump($_SESSION['tipo_user']);
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 $eventController = new EventController($_ENV['DB_HOST'], $_ENV['DB_USER'], '', $_ENV['DB_NAME']);
@@ -42,7 +42,7 @@ if (isset($_POST['delete_event'])) {
 <html>
 <head>
     <title>Home</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="assets/styles/style.css">
 </head>
 <body>
     <main>

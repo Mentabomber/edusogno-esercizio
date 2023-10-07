@@ -44,7 +44,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>Cambio Password </title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="assets/styles/style.css"/>
 </head>
 <body>
 <?php 

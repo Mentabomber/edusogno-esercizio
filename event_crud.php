@@ -46,7 +46,6 @@ class EventController {
         $description = $this->conn->real_escape_string($event->description);
         $sql = "INSERT INTO `eventi` (nome_evento, data_evento, attendees, description) VALUES ('$title', '$dataEvento', '$attendees', '$description')";
         $this->conn->query($sql);
-        // header('Location: admin_dashboard.php');
     }
 
     public function editEvent($id, Event $event) {
@@ -56,7 +55,6 @@ class EventController {
         $description = $this->conn->real_escape_string($event->description);
         $sql = "UPDATE `eventi` SET nome_evento='$title', data_evento='$dataEvento', attendees='$attendees', description='$description' WHERE id=$id";
         $this->conn->query($sql);
-        header('Location: admin_dashboard.php');
     }
 
     public function deleteEvent($id) {

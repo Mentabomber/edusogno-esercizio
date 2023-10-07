@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>Login</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="assets/styles/style.css"/>
     <link href="https://fonts.cdnfonts.com/css/dm-sans" rel="stylesheet">
 </head>
 <body>
@@ -76,8 +76,8 @@
             // l'utente non esiste
             echo "<div class='success-form'>
                   <h3 class='registration-title'>Email o password errata.</h3><br/>
-                  <p class='link'Clicka qui per provare dio <a href='login.php'>Autenticarti</a> di nuovo.</p>
-                  </div>";
+                  <p class='link'>Clicka qui per provare ad <a href='login.php'>Autenticarti</a> di nuovo.</p>
+                      </div>";
         }
     } else {
 ?>

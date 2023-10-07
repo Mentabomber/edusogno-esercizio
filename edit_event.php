@@ -28,7 +28,26 @@
 
     // When form submitted, insert values into the database.
     if (isset($_POST['submit'])) {
+        // // Validate nome
+        if (empty($_POST['nome_evento'])) {
+            $errors['title'] = "* Il titolo è richiesto.";
+        } elseif (strlen($_POST['nome_evento']) < 3 || strlen($_POST['nome_evento']) > 25) {
+            $errors['title'] = "* Il titolo deve essere lungo tra 3 e 25 caratteri.";
+        } elseif ($_POST['nome_evento'] != $nomeEvento){
+            // Check if the title is already taken
+            $existingTitleQuery = "SELECT COUNT(*) FROM `eventi` WHERE nome_evento = ?";
+            $stmtTitle = $con->prepare($existingTitleQuery);
+            $stmtTitle->bind_param("s", $_POST['nome_evento']);
+            $stmtTitle->execute();
+            $stmtTitle->bind_result($titleCount);
+            $stmtTitle->fetch();
+            $stmtTitle->close();
     
+            if ($titleCount > 0) {
+                $errors['title'] = "* Questo titolo è già stato utilizzato per un evento.";
+            }
+        }
+        
         // Validation code for attendees
         if (empty($_POST['attendees'])) {
             $errors['attendees'] = "* L'elenco dei partecipanti è richiesto.";
@@ -52,6 +71,7 @@
             $editedDescription = $_POST['description'];
             
             $eventController->editEvent($id, new Event($editedNomeEvento, $editedDataEvento, $editedAttendees, $editedDescription));
+            $editSuccessful = true;
 
             $to      = $attendeesArray;
             $subject = 'Modifica Evento';
@@ -68,10 +88,10 @@
             } catch (Exception $e) {
                 echo "Errore nell'invio dell'email: " . $e->getMessage();
             }
+
+            
         }
-        $eventController->closeConnection();
-        // If registration is successful, set a flag
-        //  $creationnSuccessful = ($stmt->affected_rows > 0);
+       
     }
 // Set values for valid fields or empty strings for fields with errors
 $titleValue = (isset($_POST['title']) && !isset($errors['title'])) ? htmlspecialchars($_POST['title']) : '';
@@ -86,46 +106,64 @@ $descriptionValue = (isset($_POST['description']) && !isset($errors['description
 <head>
     <meta charset="utf-8"/>
     <title>Registration</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="assets/styles/style.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tagify/4.17.9/tagify.min.js" integrity="sha512-E6nwMgRlXtH01Lbn4sgPAn+WoV2UoEBlpgg9Ghs/YYOmxNpnOAS49+14JMxIKxKSH3DqsAUi13vo/y1wo9S/1g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
-
-<form class="form" action="" method="post">
-        <h1 class="login-title">Modifica evento</h1>
-        <div class="login-input-box">
-
-            <label for="nome_evento">Inserisci il titolo</label>
-            <input type="text" class="login-input" name="nome_evento" value="<?php echo $nomeEvento; ?>" required />
-            <?php echo isset($errors['title']) ? "<span class='error'>" . $errors['title'] . "</span>" : ""; ?>
-        </div>
-        <div class="login-input-box">
-
-            <label for="data_evento">Inserisci la data</label>
-            <input type="datetime-local" class="login-input" name="data_evento" value="<?php echo $dataEvento; ?>" required />
-            <?php if (isset($errors['data_evento'])) { echo "<span class='error'>" . $errors['data_evento'] . "</span>"; } ?>
-        </div>
-
-        <div class="login-input-box">
-            
-            <label for="attendees">Inserisci le mail dei partecipanti</label>
-            <input type="text" class="login-input" name="attendees"  value="<?php echo $attendees; ?>" required />
-            <?php if (isset($errors['attendees'])) { echo "<span class='error'>" . $errors['attendees'] . "</span>"; } ?>
-        </div>
-
-        <div class="login-input-box">
-
-            <label for="description">Inserisci la descrizione</label>
-            <input type="text" class="login-input" name="description" value="<?php echo $description; ?>" required />
-            <?php if (isset($errors['description'])) { echo "<span class='error'>" . $errors['description'] . "</span>"; } ?>
-        </div>
-
-        <input type="submit" name="submit" value="Modifica" class="login-button">
-    </form>
-    <?php
-    // } // End of conditional statement
+<?php
+    // Check if registration was successful
+    if (isset($editSuccessful) && $editSuccessful) {
+        // Display success message
+        echo "<div class='success-form'>
+              <h3 class='registration-title'>Modifica evento avvenuta con successo.</h3><br/>
+              <p class='link'>Clicca qui per <a href='admin_dashboard.php'>tornare</a> alla dashboard.</p>
+              </div>";
+    } else {
+        // Display the registration form
+    
 ?>
+<main>
+    <div class="container">
+        <h1 class="registration-title">Modifica evento</h1>
+        <form class="event-creation-form" action="" method="post">
+            <div class="input-box">
 
+                <label for="nome_evento">Inserisci il titolo</label>
+                <input type="text" class="login-input" name="nome_evento" value="<?php echo $nomeEvento; ?>" required />
+                
+            </div>
+            <?php echo isset($errors['title']) ? "<span class='error'>" . $errors['title'] . "</span>" : ""; ?>
+            <div class="input-box">
+
+                <label for="data_evento">Inserisci la data</label>
+                <input type="datetime-local" class="login-input" name="data_evento" value="<?php echo $dataEvento; ?>" required />
+               
+            </div>
+            <?php if (isset($errors['data_evento'])) { echo "<span class='error'>" . $errors['data_evento'] . "</span>"; } ?>
+
+            <div class="input-box">
+                
+                <label for="attendees">Inserisci le mail dei partecipanti</label>
+                <input type="text" class="login-input" name="attendees"  value="<?php echo $attendees; ?>" required />
+               
+            </div>
+            <?php if (isset($errors['attendees'])) { echo "<span class='error'>" . $errors['attendees'] . "</span>"; } ?>
+
+            <div class="input-box">
+
+                <label for="description">Inserisci la descrizione</label>
+                <input type="text" class="login-input" name="description" value="<?php echo $description; ?>" required />
+              
+            </div>
+            <?php if (isset($errors['description'])) { echo "<span class='error'>" . $errors['description'] . "</span>"; } ?>
+
+            <input type="submit" name="submit" value="Modifica" class="login-button input-button-box">
+        </form>
+    </div>
+</main>
+    <?php
+    } // End of conditional statement
+?>
 
 </body>
 </html>

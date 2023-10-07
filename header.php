@@ -1,6 +1,6 @@
 <header>
     <div class="header-div">
-        <img src="./img/logo.svg" alt="">
+        <img src="./assets/img/logo.svg" alt="">
     </div>
 </header>
 

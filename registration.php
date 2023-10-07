@@ -1,5 +1,5 @@
 <?php
-    require('db.php');
+    require_once('db.php');
     require_once('header.php');
     $errors = array();
 
@@ -75,7 +75,7 @@ $emailValue = (isset($_POST['email']) && !isset($errors['email'])) ? htmlspecial
 <head>
     <meta charset="utf-8"/>
     <title>Registration</title>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="assets/styles/style.css"/>
 </head>
 <body>
 <?php

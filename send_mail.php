@@ -10,7 +10,7 @@
      
     
     }
-
+    // Funzione per mandare l'email di creazione/modifica di un evento
     function sendEventEmail($to, $subject, $message, $headers) {
        
             //foreach che gestisce il caso in cui ci siano più soggeti a cui mandare mail

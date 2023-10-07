@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Dashboard - Client area</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="assets/styles/style.css" />
     <link href="https://fonts.cdnfonts.com/css/dm-sans" rel="stylesheet">
 </head>
 <body><?php
@@ -11,7 +11,6 @@
     require_once __DIR__ . '/vendor/autoload.php';
     require_once('header.php');
     require_once("auth_session.php");
-    // chiedo i dati degli eventi al database
     require_once("get_eventi.php");
     require_once("send_mail.php");
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
@@ -20,7 +19,6 @@
     // Controllo se l'email è stata mandata tramite $_SESSION['mail_sent'] e invio di messaggio di successo
     if(isset($_SESSION['mail_sent'])){
         echo("<script> alert('Email inviata con successo.')</script>");
-        // echo "L'e-mail è stata mandata con successo!";
         //reset della sessione mail_sent cosi da non rivedere il messaggio al reload della pagina 
         $_SESSION['mail_sent'] = Null;
     }
@@ -35,7 +33,6 @@
         $headers .= 'From: ' . $_ENV['SENDER_EMAIL'] . "\r\n";
         // Chiama la funzione per inviare l'email
             try {
-                echo "ciao";
                 sendResetEmail($to, $subject, $message, $headers);
                 // do un valore a $_SESSION['mail_sent'] cosi da poter poi mandare un messaggio di mandata mail su schermo
                 $_SESSION['mail_sent']='Y';
@@ -61,8 +58,10 @@
                         foreach ($events as $event) { ?>
                             <div class="event-card">
                                 <h3><?php echo $event['nome_evento']; ?></h3><br/>
-                                <span><?php echo $event['data_evento']; ?></span><br/>
-                                <button class="btn">JOIN</button>
+                                <div class="bottom-card-container">
+                                    <span><?php echo $event['data_evento']; ?></span><br/>
+                                    <button class="btn">JOIN</button>
+                                </div>
                             </div>
                         <?php   } ?>
                 <?php   } ?>

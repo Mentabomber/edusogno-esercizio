@@ -1,7 +1,3 @@
-```sh
-FORKATE LA REPO
-```
+Ho sviluppato il servizio di mailing e di login nel database attraverso il file .env quindi bisogna creare un file .env e cambiarle manualmente per fare delle prove in caso.
 
-- UTILIZZATE LA STRUTTURA PRESENTE NELLA REPO
-
-- ALL'INTERNO DI assets > db TROVERETE IL FILE DI MIGRAZIONE DEL DB 'Migrations.sql' CON IL NECESSARIO PER CREARE LA TABELLA utenti E eventi E PER MIGRARE I DATI DEGLI EVENTI
+Per provare funzioni del seito da admin bisogna modificare direttamente nel database tipo_user e mettere "admin" poi si potrà accedere a tutte le pagine.
