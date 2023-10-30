@@ -12,12 +12,12 @@ $dotenv->load();
 $eventController = new EventController($_ENV['DB_HOST'], $_ENV['DB_USER'], '', $_ENV['DB_NAME']);
 
 $events = getEventi($_SESSION['email']);
-// controlla se l'utente è un admin se non lo è chiude sessione è lo manda alla login page
+// Call to see if the user is an admin if not the user gets redirected to the login page and logged out
 if (!isAdmin()) {
     header('Location: logout.php');
 }
 if (isset($_POST['edit_event'])) {
-    // Chiama la funzione per modificare l'evento
+    // Call to the function to edit an event
         try {
             $_SESSION['event_id'] = intval($_POST['edit_event']);
             header('Location: edit_event.php');
@@ -27,7 +27,7 @@ if (isset($_POST['edit_event'])) {
         }
 }
 if (isset($_POST['delete_event'])) {
-    // Chiama la funzione per eliminare l'evento
+    // Call to the function to delete an event
         try {
             $_SESSION['event_id'] = intval($_POST['delete_event']);
             $eventController->deleteEvent($_SESSION['event_id']);
@@ -47,17 +47,22 @@ if (isset($_POST['delete_event'])) {
 <body>
     <main>
         <div class="container">
+            <div id="creation_container">
+                <a id="creation_button" href="create_event.php">Crea Nuovo Evento</a>
+                <br/>
+                <a class="logout-interaction" href="logout.php">Logout</a>
+            </div>
             <h1 class="dashboard-title">Admin Dashboard</h1>
             <h2 class="dashboard-title">Gestisci Eventi</h2>
             <div id="events-container">
             <?php 
-            // messaggio ricevuto se non ci sono eventi disponibili
+            // If $events is empty show message 
             if (count($events) < 1) { ?>
                 <h3 class="dashboard-title">Non ci sono eventi disponibili al momento.</h3>
             <?php } 
+            //Else print the events on the dashboard
             else { ?>
                 <?php
-                     
                     foreach ($events as $event) { ?>
                         <div class='event-card' value="<?php echo $event['id']; ?>">
                             <h3><?php echo $event['nome_evento']; ?></h3><br/>
@@ -74,12 +79,6 @@ if (isset($_POST['delete_event'])) {
                         </div>
             <?php   } ?>
     <?php   } ?>
-            </div>
-            <br/>
-            <div id="creation_container">
-                <a id="creation_button" href="create_event.php">Crea Nuovo Evento</a>
-                <br/>
-                <a class="logout-interaction" href="logout.php">Logout</a>
             </div>
         </div>
     </main>

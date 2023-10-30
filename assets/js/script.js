@@ -1,10 +1,7 @@
-const togglePassword = document.querySelector("#togglePassword");
-const password = document.querySelector("#password");
-
-togglePassword.addEventListener("click", function () {
-    // toggle the type attribute
-    const type = password.getAttribute("type") === "password" ? "text" : "password";
-    password.setAttribute("type", type);
-    
-
-});
+function togglePasswordVisibility(toggleElement, targetElement) {
+    toggleElement.addEventListener("click", function () {
+        // Toggle the type attribute
+        const type = targetElement.getAttribute("type") === "password" ? "text" : "password";
+        targetElement.setAttribute("type", type);
+    });
+}

@@ -10,6 +10,7 @@
     if (!isAdmin()) {
         header('location: logout.php');
     }
+
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
 
@@ -37,9 +38,8 @@
                 $errors['title'] = "* Questo titolo è già stato utilizzato per un evento.";
             }
         }
+
         // Validate data
-
-
         // Validation code for attendees
         if (empty($_POST['attendees'])) {
             $errors['attendees'] = "* L'elenco dei partecipanti è richiesto.";
@@ -47,6 +47,7 @@
             $attendeesArray = explode(',', $_POST['attendees']);
             foreach ($attendeesArray as $email) {
                 $trimmedEmail = trim($email);
+                // Using a regex pattern to check the e-mail input
                 $pattern = "/^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/";
                 if (!preg_match($pattern, $trimmedEmail) || strlen($trimmedEmail) > 50) {
                     $errors['attendees'] = "* L'elenco dei partecipanti contiene un'email non valida o troppo lunga.";
@@ -74,7 +75,7 @@
             $headers .= 'From: ' . $_ENV['SENDER_EMAIL'] . "\r\n";
 
             
-            // Chiama la funzione per inviare l'email
+            // Calling the function to send an e-mail
             try {
                 
                 sendEventEmail($to, $subject, $message, $headers);

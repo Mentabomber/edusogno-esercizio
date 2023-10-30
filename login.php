@@ -8,11 +8,9 @@
 </head>
 <body>
 <?php
-    
     require_once('db.php');
     require_once('header.php');
     session_start();
-
     if(isset($_SESSION['email']))
     {
         header('Location: dashboard.php');
@@ -24,7 +22,7 @@
         $password = stripslashes($_REQUEST['password']);
         $password = mysqli_real_escape_string($con, $password);
         
-        // Check user is exist in the database
+        // Check if user exists in the database
         $query = "SELECT * FROM `utenti` WHERE email='$email'";
         $result = mysqli_query($con, $query) or die(mysql_error());
         $rows = mysqli_num_rows($result);
@@ -33,7 +31,7 @@
             // Fetch the stored hashed password
             $userData = mysqli_fetch_assoc($result);
             $hashedPassword = $userData['password'];
-
+            $_SESSION['password'] = $hashedPassword;
             // Verify the password
             if (password_verify($password, $hashedPassword)) {
                 // Password is correct
@@ -66,14 +64,14 @@
                
 
             } else {
-                // la Password non è corretta
+                // password is not correct
                 echo "<div class='success-form'>
                       <h3 class='registration-title'>Email o password errata.</h3><br/>
                       <p class='link'>Clicka qui per provare ad <a href='login.php'>Autenticarti</a> di nuovo.</p>
                       </div>";
             }
         } else {
-            // l'utente non esiste
+            // user doesn't exist
             echo "<div class='success-form'>
                   <h3 class='registration-title'>Email o password errata.</h3><br/>
                   <p class='link'>Clicka qui per provare ad <a href='login.php'>Autenticarti</a> di nuovo.</p>
@@ -121,11 +119,7 @@
             // toggle the type attribute
             const type = password.getAttribute("type") === "password" ? "text" : "password";
             password.setAttribute("type", type);
-            
-
         });
-
-        
     </script>
 </body>
 </html>

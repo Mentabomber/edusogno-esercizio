@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="assets/styles/style.css" />
     <link href="https://fonts.cdnfonts.com/css/dm-sans" rel="stylesheet">
 </head>
-<body><?php
-
+<body>
+    <?php
     require_once __DIR__ . '/vendor/autoload.php';
     require_once('header.php');
     require_once("auth_session.php");
@@ -25,6 +25,7 @@
 
     // Se è stato fatto un clic sul pulsante di reset password
     if (isset($_POST['reset_password'])) {
+        $_SESSION['password_changed'] = false;
         $to      = $mail;
         $subject = 'Reset Password';
         $message = 'Ciao clicka il link per resettare la tua password <a href="http://localhost/Progetto-Edusogno/Edusogno_login/reset_pswd.php">Qui</a>' ;
@@ -38,20 +39,25 @@
                 $_SESSION['mail_sent']='Y';
                 // uso header per farsì che nel reload della pagina non venga rimandata un'email tramite la funzione sendResetEmail
                 header('Location: '.$_SERVER['REQUEST_URI']);
-                
             } catch (Exception $e) {
                 echo "Errore nell'invio dell'email: " . $e->getMessage();
             }
+
     }
 ?>
     <main>
         <div class="container">
+            <div id="reset_container">
+                    <form id="reset_form" method="post">
+                        <button id="reset_button" class="btn" type="submit" name="reset_password">Resetta password</button>
+                    </form>
+                <a class="logout-interaction" href="logout.php">Logout</a>
+            </div>
             <h1 class="dashboard-title">Ciao <?php echo $_SESSION['nome']['nome'] . " " . $_SESSION['cognome']['cognome']?> ecco i tuoi eventi</h1>
             <div id="events-container">
                 <?php 
-                // messaggio ricevuto se non ci sono eventi disponibili
                 if (count($events) < 1) { ?>
-                    <h3>Non ci sono eventi disponibili al momento.</h3>
+                    <h3 id="no-events-title">Non ci sono eventi disponibili al momento.</h3>
                 <?php } 
                 else { ?>
                     <?php  
@@ -66,14 +72,6 @@
                         <?php   } ?>
                 <?php   } ?>
             </div>
-            <br/>
-            <div id="reset_container">
-                <form id="reset_form" method="post">
-                    <button id="reset_button" class="btn" type="submit" name="reset_password">Resetta password</button>
-                </form>
-               <a class="logout-interaction" href="logout.php">Logout</a>
-            </div>
-
         </div>
     </main>
 </body>

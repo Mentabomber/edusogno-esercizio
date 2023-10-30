@@ -1,0 +1,3 @@
+try/catch per le query verso il db così da vedere se c'è qualche problema nel mandare dati al db
+
+spostare check isAdmin in una pagina singola invece che ripeterlo ogni volta nelle varie pagine dove serve (admin_dashboard/create_event/edit_event)

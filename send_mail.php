@@ -1,19 +1,19 @@
 <?php
-    // Prendo l'email della sessione attiva per definire chi è loggato
+    // Getting the $_SESSION email to identify who is logged in
     $mail = $_SESSION['email'];
 
     
-    // Funzione per mandare l'email del reset della password
+    // Function used to send the pswd reset email
     function sendResetEmail($to, $subject, $message, $headers) {
         
         mail($to, $subject, $message, $headers);
      
     
     }
-    // Funzione per mandare l'email di creazione/modifica di un evento
+    // Function to send an email to notify users wherever an event that they are partecipating was modified or created
     function sendEventEmail($to, $subject, $message, $headers) {
        
-            //foreach che gestisce il caso in cui ci siano più soggeti a cui mandare mail
+            //foreach used in the case there are more than 1 partecipants to the same event
             foreach ($to as $recipient) {
                 mail($recipient, $subject, $message, $headers);
             }

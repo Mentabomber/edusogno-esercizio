@@ -9,12 +9,10 @@
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv->load();
     $eventController = new EventController($_ENV['DB_HOST'], $_ENV['DB_USER'], '', $_ENV['DB_NAME']);
-    // $eventController = new EventController('localhost', 'root', '', 'db-edusogno');
     if (!isAdmin()) {
         header('Location: logout.php');
     }
    
-
     $id = $_SESSION['event_id'];
 
     $eventById = $eventController->getEventById($id);
@@ -80,7 +78,7 @@
             $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
             $headers .= 'From: ' . $_ENV['SENDER_EMAIL'] . "\r\n";
             $_SESSION['modifica_evento'] = false;
-            // Chiama la funzione per inviare l'email
+            // calling the functiont to send an email
             try {
                 
                 sendEventEmail($to, $subject, $message, $headers);
