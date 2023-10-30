@@ -1,3 +1,4 @@
 try/catch per le query verso il db così da vedere se c'è qualche problema nel mandare dati al db
 
-spostare check isAdmin in una pagina singola invece che ripeterlo ogni volta nelle varie pagine dove serve (admin_dashboard/create_event/edit_event)
+spostare check isAdmin in una pagina singola invece che ripeterlo ogni volta nelle varie pagine dove serve (admin_dashboard/create_event/edit_event)  posso per esempio aggiungere una pagina admin_check e aggiungerla tramite require_once 
+
